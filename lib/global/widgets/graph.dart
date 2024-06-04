@@ -2,8 +2,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../features/index_bloc.dart';
-import '../global/constants/life_unit_keys.dart';
+import '../../features/index_bloc.dart';
+import '../constants/life_unit_keys.dart';
 
 class Graph extends StatelessWidget {
   const Graph({super.key});
@@ -44,6 +44,8 @@ class Graph extends StatelessWidget {
           minX: 0,
           maxX: 10,
         ),
+        swapAnimationCurve: Curves.easeInOut,
+        swapAnimationDuration: const Duration(milliseconds: 500),
       );
     });
   }
@@ -64,6 +66,7 @@ class Graph extends StatelessWidget {
 
   ScatterSpot _dot(
       {required double x, required double y, required double size, required Color color}) {
-    return ScatterSpot(x, y, dotPainter: FlDotCirclePainter(radius: (size + 1) * 10, color: color));
+    return ScatterSpot(x, y,
+        dotPainter: FlDotCirclePainter(radius: (size + 1) / 1.68 * 4, color: color));
   }
 }

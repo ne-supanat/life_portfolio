@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../features/index_bloc.dart';
-import '../global/constants/life_unit_index_keys.dart';
-import '../global/constants/life_unit_keys.dart';
+import '../constants/life_unit_index_keys.dart';
+import '../constants/life_unit_keys.dart';
+import 'input_field.dart';
 
 class InputBoard extends StatelessWidget {
   const InputBoard({super.key});
@@ -146,92 +145,14 @@ class InputBoard extends StatelessWidget {
             ),
           ),
         ),
-        _inputCell(_input(topic: topic, index: LifeUnitIndexKey.importance)),
-        _inputCell(_input(topic: topic, index: LifeUnitIndexKey.timeSpend)),
-        _inputCell(_input(topic: topic, index: LifeUnitIndexKey.satisfaction)),
+        _inputCell(InputField(topic: topic, index: LifeUnitIndexKey.importance)),
+        _inputCell(InputField(topic: topic, index: LifeUnitIndexKey.timeSpend)),
+        _inputCell(InputField(topic: topic, index: LifeUnitIndexKey.satisfaction)),
       ],
     );
   }
 
   DataCell _inputCell(Widget child) {
     return DataCell(SizedBox(width: columnWidth, child: child));
-  }
-
-  Widget _input({
-    required LifeUnitKey topic,
-    required LifeUnitIndexKey index,
-  }) {
-    return BlocBuilder<LifeBloc, LifeModel>(
-      builder: (context, state) {
-        final lifeBloc = BlocProvider.of<LifeBloc>(context);
-
-        int value() {
-          switch (index) {
-            case LifeUnitIndexKey.importance:
-              return state.life[topic]!.importance;
-            case LifeUnitIndexKey.timeSpend:
-              return state.life[topic]!.timeSpend;
-            case LifeUnitIndexKey.satisfaction:
-              return state.life[topic]!.satisfaction;
-          }
-        }
-
-        decrease(LifeUnitIndexKey index) {
-          switch (index) {
-            case LifeUnitIndexKey.importance:
-              lifeBloc.updateUnitImportanceDecrease(topic);
-              break;
-            case LifeUnitIndexKey.timeSpend:
-              lifeBloc.updateUnitTimeSpendDecrease(topic);
-              break;
-            case LifeUnitIndexKey.satisfaction:
-              lifeBloc.updateUnitSatisfactionDecrease(topic);
-              break;
-          }
-        }
-
-        increase(LifeUnitIndexKey index) {
-          switch (index) {
-            case LifeUnitIndexKey.importance:
-              lifeBloc.updateUnitImportanceIncrease(topic);
-              break;
-            case LifeUnitIndexKey.timeSpend:
-              lifeBloc.updateUnitTimeSpendIncrease(topic);
-              break;
-            case LifeUnitIndexKey.satisfaction:
-              lifeBloc.updateUnitSatisfactionIncrease(topic);
-              break;
-          }
-        }
-
-        return SizedBox(
-          width: 100,
-          child: Row(
-            children: [
-              IconButton(
-                onPressed: () => decrease(index),
-                icon: const Icon(Icons.remove),
-                iconSize: 16,
-                visualDensity: VisualDensity.compact,
-              ),
-              const SizedBox(width: 4),
-              Expanded(
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Text(value().toString()),
-                ),
-              ),
-              const SizedBox(width: 4),
-              IconButton(
-                onPressed: () => increase(index),
-                icon: const Icon(Icons.add),
-                iconSize: 16,
-                visualDensity: VisualDensity.compact,
-              )
-            ],
-          ),
-        );
-      },
-    );
   }
 }
