@@ -30,17 +30,17 @@ extension LifeAreaKeyExtension on LifeAreaKey {
   Color get color {
     switch (this) {
       case LifeAreaKey.relationships:
-        return Colors.red;
+        return Colors.blue;
       case LifeAreaKey.bodyMindSpirituality:
         return Colors.green;
       case LifeAreaKey.comunitySociety:
-        return Colors.blue;
-      case LifeAreaKey.jobLearningFinances:
         return Colors.purple;
-      case LifeAreaKey.interestEntertainment:
+      case LifeAreaKey.jobLearningFinances:
         return Colors.orange;
+      case LifeAreaKey.interestEntertainment:
+        return Colors.pinkAccent;
       case LifeAreaKey.personalCare:
-        return Colors.pink;
+        return Colors.red;
     }
   }
 }

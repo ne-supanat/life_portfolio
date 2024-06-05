@@ -9,10 +9,10 @@ import '../constants/life_unit_index_keys.dart';
 import '../constants/life_unit_keys.dart';
 
 class InputField extends StatefulWidget {
-  const InputField({super.key, required this.index, required this.topic});
+  const InputField({super.key, required this.index, required this.unit});
 
   final LifeUnitIndexKey index;
-  final LifeUnitKey topic;
+  final LifeUnitKey unit;
 
   @override
   State<InputField> createState() => _InputFieldState();
@@ -105,24 +105,24 @@ class _InputFieldState extends State<InputField> {
   int _value(LifeModel state) {
     switch (widget.index) {
       case LifeUnitIndexKey.importance:
-        return state.life[widget.topic]!.importance;
+        return state.life[widget.unit]!.importance;
       case LifeUnitIndexKey.timeSpend:
-        return state.life[widget.topic]!.timeSpend;
+        return state.life[widget.unit]!.timeSpend;
       case LifeUnitIndexKey.satisfaction:
-        return state.life[widget.topic]!.satisfaction;
+        return state.life[widget.unit]!.satisfaction;
     }
   }
 
   _decrease() {
     switch (widget.index) {
       case LifeUnitIndexKey.importance:
-        lifeBloc.updateUnitImportanceDecrease(widget.topic);
+        lifeBloc.updateUnitImportanceDecrease(widget.unit);
         break;
       case LifeUnitIndexKey.timeSpend:
-        lifeBloc.updateUnitTimeSpendDecrease(widget.topic);
+        lifeBloc.updateUnitTimeSpendDecrease(widget.unit);
         break;
       case LifeUnitIndexKey.satisfaction:
-        lifeBloc.updateUnitSatisfactionDecrease(widget.topic);
+        lifeBloc.updateUnitSatisfactionDecrease(widget.unit);
         break;
     }
   }
@@ -130,13 +130,13 @@ class _InputFieldState extends State<InputField> {
   _increase() {
     switch (widget.index) {
       case LifeUnitIndexKey.importance:
-        lifeBloc.updateUnitImportanceIncrease(widget.topic);
+        lifeBloc.updateUnitImportanceIncrease(widget.unit);
         break;
       case LifeUnitIndexKey.timeSpend:
-        lifeBloc.updateUnitTimeSpendIncrease(widget.topic);
+        lifeBloc.updateUnitTimeSpendIncrease(widget.unit);
         break;
       case LifeUnitIndexKey.satisfaction:
-        lifeBloc.updateUnitSatisfactionIncrease(widget.topic);
+        lifeBloc.updateUnitSatisfactionIncrease(widget.unit);
         break;
     }
   }

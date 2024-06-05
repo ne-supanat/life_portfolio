@@ -8,7 +8,10 @@ import 'life_unit_model.dart';
 class LifeModel {
   final Map<LifeUnitKey, LifeUnitModel> life;
 
-  LifeModel(this.life);
+  final LifeAreaKey? focusedArea;
+  final LifeUnitKey? focusedUnit;
+
+  LifeModel(this.life, {this.focusedArea, this.focusedUnit});
 
   factory LifeModel.i() {
     return LifeModel(
@@ -27,6 +30,14 @@ class LifeModel {
   LifeModel update(Map<LifeUnitKey, LifeUnitModel> life) {
     GetIt.instance<AppSharedPref>().writLife(LifeModel(life));
     return LifeModel(life);
+  }
+
+  LifeModel focusArea(LifeAreaKey? area) {
+    return LifeModel(life, focusedArea: area);
+  }
+
+  LifeModel focusUnit(LifeUnitKey? unit) {
+    return LifeModel(life, focusedUnit: unit);
   }
 
   static const _$LifeUnitEnumMap = {

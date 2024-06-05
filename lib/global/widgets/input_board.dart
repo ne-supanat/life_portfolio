@@ -24,6 +24,7 @@ class InputBoard extends StatelessWidget {
             children: [
               const Tooltip(
                 message: 'Importance: 0 - 10\nTime spend: hours per week\nSatisfication: 0 - 10',
+                verticalOffset: 8,
                 child: Row(
                   children: [
                     Icon(
@@ -52,79 +53,90 @@ class InputBoard extends StatelessWidget {
           ),
         ),
         _box(
-          color: Colors.blue.shade100,
+          context,
           area: LifeAreaKey.relationships,
           children: [
-            _tableRow(context: context, topic: LifeUnitKey.significantOther),
-            _tableRow(context: context, topic: LifeUnitKey.family),
-            _tableRow(context: context, topic: LifeUnitKey.friendship),
+            _tableRow(context: context, unit: LifeUnitKey.significantOther),
+            _tableRow(context: context, unit: LifeUnitKey.family),
+            _tableRow(context: context, unit: LifeUnitKey.friendship),
           ],
         ),
         _box(
-          color: Colors.blue.shade100,
+          context,
           area: LifeAreaKey.bodyMindSpirituality,
           children: [
-            _tableRow(context: context, topic: LifeUnitKey.physicalHealth),
-            _tableRow(context: context, topic: LifeUnitKey.mentalHealth),
-            _tableRow(context: context, topic: LifeUnitKey.spirituality),
+            _tableRow(context: context, unit: LifeUnitKey.physicalHealth),
+            _tableRow(context: context, unit: LifeUnitKey.mentalHealth),
+            _tableRow(context: context, unit: LifeUnitKey.spirituality),
           ],
         ),
         _box(
-          color: Colors.blue.shade100,
+          context,
           area: LifeAreaKey.comunitySociety,
           children: [
-            _tableRow(context: context, topic: LifeUnitKey.community),
-            _tableRow(context: context, topic: LifeUnitKey.societalEngagement),
+            _tableRow(context: context, unit: LifeUnitKey.community),
+            _tableRow(context: context, unit: LifeUnitKey.societalEngagement),
           ],
         ),
         _box(
-          color: Colors.blue.shade100,
+          context,
           area: LifeAreaKey.jobLearningFinances,
           children: [
-            _tableRow(context: context, topic: LifeUnitKey.job),
-            _tableRow(context: context, topic: LifeUnitKey.education),
-            _tableRow(context: context, topic: LifeUnitKey.finances),
+            _tableRow(context: context, unit: LifeUnitKey.job),
+            _tableRow(context: context, unit: LifeUnitKey.education),
+            _tableRow(context: context, unit: LifeUnitKey.finances),
           ],
         ),
         _box(
-          color: Colors.blue.shade100,
+          context,
           area: LifeAreaKey.interestEntertainment,
           children: [
-            _tableRow(context: context, topic: LifeUnitKey.hobbies),
-            _tableRow(context: context, topic: LifeUnitKey.onlineEntertainment),
-            _tableRow(context: context, topic: LifeUnitKey.offlineEntertainment),
+            _tableRow(context: context, unit: LifeUnitKey.hobbies),
+            _tableRow(context: context, unit: LifeUnitKey.onlineEntertainment),
+            _tableRow(context: context, unit: LifeUnitKey.offlineEntertainment),
           ],
         ),
         _box(
-          color: Colors.blue.shade100,
+          context,
           area: LifeAreaKey.personalCare,
           children: [
-            _tableRow(context: context, topic: LifeUnitKey.physiologicalNeeds),
-            _tableRow(context: context, topic: LifeUnitKey.activitiesDailyLiving),
+            _tableRow(context: context, unit: LifeUnitKey.physiologicalNeeds),
+            _tableRow(context: context, unit: LifeUnitKey.activitiesDailyLiving),
           ],
         ),
       ],
     );
   }
 
-  Widget _box({required LifeAreaKey area, required List<DataRow> children, required Color color}) {
+  Widget _box(BuildContext context, {required LifeAreaKey area, required List<DataRow> children}) {
     return Container(
       margin: const EdgeInsets.all(8),
-      decoration:
-          BoxDecoration(color: color.withOpacity(0.5), borderRadius: BorderRadius.circular(8)),
+      decoration: BoxDecoration(
+          color: area.color.withOpacity(0.25), borderRadius: BorderRadius.circular(8)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            decoration: const BoxDecoration(
-              color: Colors.blue,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
-            ),
-            child: Text(
-              area.name,
-              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
+          InkWell(
+            onTap: () {},
+            onHover: (value) {
+              final lifeBloc = BlocProvider.of<LifeBloc>(context);
+              if (value) {
+                lifeBloc.updateFocusedArea(area);
+              } else {
+                lifeBloc.updateFocusedArea(null);
+              }
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              decoration: BoxDecoration(
+                color: area.color.withOpacity(0.8),
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+              ),
+              child: Text(
+                area.name,
+                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
             ),
           ),
           SingleChildScrollView(
@@ -160,31 +172,49 @@ class InputBoard extends StatelessWidget {
     );
   }
 
-  DataRow _tableRow({required BuildContext context, required LifeUnitKey topic}) {
+  DataRow _tableRow({required BuildContext context, required LifeUnitKey unit}) {
     return DataRow(
       color: const MaterialStatePropertyAll(Colors.transparent),
       cells: [
         DataCell(
           SizedBox(
             width: columnFirstWidth,
-            child: Row(
-              children: [
-                Tooltip(
-                    message: '${topic.name}:\n${topic.desc}',
-                    child: const Icon(
-                      Icons.help,
-                      size: 16,
-                      color: Colors.grey,
-                    )),
-                const SizedBox(width: 8),
-                Expanded(child: Text(topic.name)),
-              ],
+            child: InkWell(
+              splashColor: Colors.transparent,
+              hoverColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              onTap: () {},
+              onHover: (value) {
+                final lifeBloc = BlocProvider.of<LifeBloc>(context);
+                if (value) {
+                  lifeBloc.updateFocusedUnit(unit);
+                } else {
+                  lifeBloc.updateFocusedUnit(null);
+                }
+              },
+              child: Tooltip(
+                  message: '${unit.name}:\n${unit.desc}',
+                  waitDuration: const Duration(milliseconds: 500),
+                  margin: const EdgeInsets.only(left: 48),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.help,
+                        size: 16,
+                        color: Colors.grey,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(unit.name),
+                      ),
+                    ],
+                  )),
             ),
           ),
         ),
-        _inputCell(InputField(topic: topic, index: LifeUnitIndexKey.importance)),
-        _inputCell(InputField(topic: topic, index: LifeUnitIndexKey.timeSpend)),
-        _inputCell(InputField(topic: topic, index: LifeUnitIndexKey.satisfaction)),
+        _inputCell(InputField(unit: unit, index: LifeUnitIndexKey.importance)),
+        _inputCell(InputField(unit: unit, index: LifeUnitIndexKey.timeSpend)),
+        _inputCell(InputField(unit: unit, index: LifeUnitIndexKey.satisfaction)),
       ],
     );
   }

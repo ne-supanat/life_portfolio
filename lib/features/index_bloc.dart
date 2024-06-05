@@ -8,6 +8,14 @@ class LifeBloc extends Cubit<LifeModel> {
 
   final LifeModel lifeModel;
 
+  updateFocusedArea(LifeAreaKey? area) {
+    emit(state.focusArea(area));
+  }
+
+  updateFocusedUnit(LifeUnitKey? unit) {
+    emit(state.focusUnit(unit));
+  }
+
   updateUnitImportanceIncrease(LifeUnitKey key) {
     final tempLife = Map<LifeUnitKey, LifeUnitModel>.from(state.life);
     final unit = tempLife[key];

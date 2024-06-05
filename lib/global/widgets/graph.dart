@@ -11,18 +11,27 @@ class Graph extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LifeBloc, LifeModel>(builder: (context, value) {
+    return BlocBuilder<LifeBloc, LifeModel>(builder: (context, state) {
       return ScatterChart(
         ScatterChartData(
-          scatterSpots: value.life
+          scatterSpots: state.life
               .map(
                 (key, value) => MapEntry(
-                    key,
-                    _dot(
-                        x: value.satisfaction.toDouble(),
-                        y: value.importance.toDouble(),
-                        size: value.timeSpend.toDouble(),
-                        color: key.area.color.withOpacity(0.5))),
+                  key,
+                  _dot(
+                    x: value.satisfaction.toDouble(),
+                    y: value.importance.toDouble(),
+                    size: value.timeSpend.toDouble(),
+                    color: key.area.color.withOpacity(
+                      (state.focusedArea == null && state.focusedUnit == null)
+                          ? 0.5
+                          : state.focusedUnit == key || state.focusedArea == key.area
+                              ? 0.9
+                              : 0.2,
+                    ),
+                    strokeWidth: state.focusedUnit == key || state.focusedArea == key.area ? 1 : 0,
+                  ),
+                ),
               )
               .values
               .toList(),
@@ -65,9 +74,19 @@ class Graph extends StatelessWidget {
     );
   }
 
-  ScatterSpot _dot(
-      {required double x, required double y, required double size, required Color color}) {
+  ScatterSpot _dot({
+    required double x,
+    required double y,
+    required double size,
+    required Color color,
+    double strokeWidth = 0,
+  }) {
     return ScatterSpot(x, y,
-        dotPainter: FlDotCirclePainter(radius: (size + 1) / 1.68 * 4, color: color));
+        dotPainter: FlDotCirclePainter(
+          radius: (size + 1) / 1.68 * 4,
+          color: color,
+          strokeWidth: strokeWidth,
+          strokeColor: Colors.black,
+        ));
   }
 }
