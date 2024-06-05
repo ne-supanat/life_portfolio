@@ -105,7 +105,7 @@ extension LifeUnitKeyExtension on LifeUnitKey {
       case LifeUnitKey.mentalHealth:
         return 'Mental health/mindfulness';
       case LifeUnitKey.spirituality:
-        return 'spirituality/faith';
+        return 'Spirituality/faith';
       case LifeUnitKey.community:
         return 'Comunity/citizenship';
       case LifeUnitKey.societalEngagement:
@@ -125,7 +125,7 @@ extension LifeUnitKeyExtension on LifeUnitKey {
       case LifeUnitKey.physiologicalNeeds:
         return 'Physiological needs';
       case LifeUnitKey.activitiesDailyLiving:
-        return 'activities of daily living';
+        return 'Activities of daily living';
     }
   }
 

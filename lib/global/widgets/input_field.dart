@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../features/index_bloc.dart';
+import '../../models/life_model.dart';
 import '../constants/life_unit_index_keys.dart';
 import '../constants/life_unit_keys.dart';
 

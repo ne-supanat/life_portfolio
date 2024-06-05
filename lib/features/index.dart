@@ -1,10 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:life_portfolio/global/sharedpref.dart';
 import 'package:life_portfolio/global/util.dart';
 import '../global/widgets/input_board.dart';
 
 import '../global/widgets/graph.dart';
+import '../models/life_model.dart';
 import 'index_bloc.dart';
 
 class Index extends StatelessWidget {
@@ -13,7 +15,10 @@ class Index extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => LifeBloc(),
+      create: (_) {
+        final savedLife = GetIt.instance<AppSharedPref>().getLife();
+        return LifeBloc(savedLife ?? LifeModel.i());
+      },
       child: Scaffold(
         body: SafeArea(
           child: isSmallDevice(context) ? _smallLayout() : _largeLayout(),
@@ -33,9 +38,11 @@ class Index extends StatelessWidget {
             )),
         Expanded(
           flex: 3,
-          child: Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Graph(),
+          child: ClipRRect(
+            child: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Graph(),
+            ),
           ),
         ),
       ],
@@ -47,11 +54,13 @@ class Index extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 8.0),
       child: Column(
         children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0),
-            child: AspectRatio(
-              aspectRatio: 1,
-              child: Graph(),
+          ClipRRect(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8.0),
+              child: AspectRatio(
+                aspectRatio: 1,
+                child: Graph(),
+              ),
             ),
           ),
           SizedBox(height: 8),

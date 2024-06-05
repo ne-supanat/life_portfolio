@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../features/index_bloc.dart';
 import '../constants/life_unit_index_keys.dart';
 import '../constants/life_unit_keys.dart';
 import 'input_field.dart';
@@ -13,7 +15,42 @@ class InputBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Tooltip(
+                message: 'Importance: 0 - 10\nTime spend: hours per week\nSatisfication: 0 - 10',
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.help,
+                      size: 16,
+                      color: Colors.grey,
+                    ),
+                    SizedBox(width: 4),
+                    Text('Info')
+                  ],
+                ),
+              ),
+              TextButton(
+                  onPressed: () {
+                    final lifeBloc = BlocProvider.of<LifeBloc>(context);
+                    lifeBloc.clear();
+                  },
+                  child: const Row(
+                    children: [
+                      Icon(Icons.restart_alt),
+                      SizedBox(width: 8),
+                      Text('Reset'),
+                    ],
+                  ))
+            ],
+          ),
+        ),
         _box(
           color: Colors.blue.shade100,
           area: LifeAreaKey.relationships,
@@ -133,7 +170,7 @@ class InputBoard extends StatelessWidget {
             child: Row(
               children: [
                 Tooltip(
-                    message: topic.desc,
+                    message: '${topic.name}:\n${topic.desc}',
                     child: const Icon(
                       Icons.help,
                       size: 16,

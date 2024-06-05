@@ -1,44 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../global/constants/life_unit_keys.dart';
-
-class LifeModel {
-  final Map<LifeUnitKey, LifeUnitModel> life;
-
-  LifeModel(this.life);
-
-  factory LifeModel.i() {
-    return LifeModel(
-        LifeUnitKey.values.asMap().map((key, value) => MapEntry(value, LifeUnitModel.i())));
-  }
-
-  LifeModel update(Map<LifeUnitKey, LifeUnitModel> life) {
-    return LifeModel(life);
-  }
-}
-
-class LifeUnitModel {
-  final int importance;
-  final int timeSpend;
-  final int satisfaction;
-
-  LifeUnitModel(this.importance, this.timeSpend, this.satisfaction);
-
-  factory LifeUnitModel.i() {
-    return LifeUnitModel(0, 0, 0);
-  }
-
-  LifeUnitModel copywith({int? importance, int? timeSpend, int? satisfaction}) {
-    return LifeUnitModel(
-      importance ?? this.importance,
-      timeSpend ?? this.timeSpend,
-      satisfaction ?? this.satisfaction,
-    );
-  }
-}
+import '../models/life_model.dart';
+import '../models/life_unit_model.dart';
 
 class LifeBloc extends Cubit<LifeModel> {
-  LifeBloc() : super(LifeModel.i());
+  LifeBloc(this.lifeModel) : super(lifeModel);
+
+  final LifeModel lifeModel;
 
   updateUnitImportanceIncrease(LifeUnitKey key) {
     final tempLife = Map<LifeUnitKey, LifeUnitModel>.from(state.life);
@@ -92,5 +60,9 @@ class LifeBloc extends Cubit<LifeModel> {
       tempLife[key] = unit.copywith(satisfaction: unit.satisfaction - 1);
       emit(state.update(tempLife));
     }
+  }
+
+  clear() {
+    emit(state.update(LifeModel.i().life));
   }
 }
